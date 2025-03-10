@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Trading Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Crypto Trading Dashboard</h1>
+        
+        {% for balance in balances %}
+        <div class="balance-item">
+            <span class="label">{{ balance.currency }} Balance</span>
+            <div class="balance-value">{{ balance.balance }}</div>
+        </div>
+        {% endfor %}
+        
+        <div style="text-align: center;">
+            <button class="refresh-btn" onclick="window.location.reload()">Refresh Balances</button>
+        </div>
+        
+        <div id="status" class="status" style="display: none;"></div>
+    </div>
+
+    <footer>
+        <p>Created by Nanribet Fwangje</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
