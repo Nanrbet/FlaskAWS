@@ -6,8 +6,8 @@ Resources:
     Properties:
       PackageType: Image
       ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/flask-app:latest"
-      MemorySize: 512
-      Timeout: 300
+      MemorySize: 128  # Set to a lower value to reduce costs  # Set to a lower value to reduce costs
+      Timeout: 60  # Set to a lower value to reduce costs # Set to a lower value to reduce costs
       Policies:
         - AWSLambdaBasicExecutionRole
       Events:
