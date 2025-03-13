@@ -4,19 +4,14 @@ Resources:
   FlaskFunction:
     Type: AWS::Serverless::Function
     Properties:
-      PackageType: Image
-      ImageUri: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/flask-app:latest"
-      MemorySize: 128  # Set to a lower value to reduce costs  # Set to a lower value to reduce costs
-      Timeout: 60  # Set to a lower value to reduce costs # Set to a lower value to reduce costs
-      Policies:
-        - AWSLambdaBasicExecutionRole
+      CodeUri: ./tradingview-coinbase-flask/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Timeout: 30
+      MemorySize: 256
       Events:
-        Api:
+        ApiEvent:
           Type: Api
           Properties:
             Path: /{proxy+}
-            Method: ANY
-Outputs:
-  FlaskApi:
-    Description: "API Gateway endpoint URL for Prod stage"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+            Method: any
