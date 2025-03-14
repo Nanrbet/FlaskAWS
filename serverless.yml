@@ -1,0 +1,35 @@
+service: flask-aws
+
+provider:
+  name: aws
+  runtime: python3.11
+  region: us-east-2
+  environment:
+    COINBASE_API_KEY: ${env:COINBASE_API_KEY}
+    COINBASE_API_SECRET: ${env:COINBASE_API_SECRET}
+
+functions:
+  app:
+    handler: tradingview-coinbase-flask/app.lambda_handler
+    events:
+      - http:
+          path: /
+          method: get
+      - http:
+          path: /api/balances
+          method: get
+      - http:
+          path: /api/webhook
+          method: post
+
+package:
+  exclude:
+    - node_modules/**
+    - venv/**
+    - .git/**
+    - .vscode/**
+    - .qodo/**
+    - Dockerfile
+    - tradingview-coinbase-flask/Dockerfile
+    - tradingview-coinbase-flask/cdp_api_key.json
+    - tradingview-coinbase-flask/vendor/**
