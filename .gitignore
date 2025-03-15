@@ -131,7 +131,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-.qodo
+.*
 ./tradingview-coinbase-flask/cdp_api_key.json
-./tradingview-coinbase-flask/Dockerfile
+/tradingview-coinbase-flask/Dockerfile
 .tradingview-coinbase-flask/vendor
