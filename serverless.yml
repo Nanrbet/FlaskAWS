@@ -1,35 +1,46 @@
-service: flask-aws
+service: flask-serverless
 
-provider:
-  name: aws
-  runtime: python3.11
-  region: us-east-2
-  environment:
-    COINBASE_API_KEY: ${env:COINBASE_API_KEY}
-    COINBASE_API_SECRET: ${env:COINBASE_API_SECRET}
-
-functions:
-  app:
-    handler: tradingview-coinbase-flask/app.lambda_handler
-    events:
-      - http:
-          path: /
-          method: get
-      - http:
-          path: /api/balances
-          method: get
-      - http:
-          path: /api/webhook
-          method: post
+frameworkVersion: '3'
 
 package:
+  individually: true
   exclude:
     - node_modules/**
     - venv/**
     - .git/**
     - .vscode/**
     - .qodo/**
-    - Dockerfile
+    - template.yaml
     - tradingview-coinbase-flask/Dockerfile
     - tradingview-coinbase-flask/cdp_api_key.json
     - tradingview-coinbase-flask/vendor/**
+
+provider:
+  name: aws
+  runtime: python3.11
+  region: us-east-2
+  stackName: flask-stack 
+  stage: dev
+  timeout: 30
+  environment:
+    STRIP_STAGE_PATH: yes
+    COINBASE_API_KEY: ${file(./tradingview-coinbase-flask/cdp_api_key.json):name}
+    COINBASE_API_SECRET: ${file(./tradingview-coinbase-flask/cdp_api_key.json):privateKey}
+
+functions:
+  app:
+    handler: tradingview-coinbase-flask/app.lambda_handler
+    events:
+      - http:
+          path: /{proxy+}
+          method: any
+
+custom:
+  wsgi:
+    app: tradingview-coinbase-flask/app.app
+  pythonRequirements:
+    zip: true
+    slim: true
+
+plugins:
+  - serverless-python-requirements
